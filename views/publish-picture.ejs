@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="cn"/>
+    <title>浆果工厂-图片交流平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico"/>
+
+    <link rel='stylesheet' type="text/css" href='/stylesheets/style.css'/>
+
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/javascripts/md5.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="col-sm-12">
+    <h1>浆果工厂 <small class="desr">图片交流平台</small></h1>
+    <a href="/watch" target="_blank"><h3>发现</h3></a>
+    <a href="/factory" target="_blank"><h3>工厂</h3></a>
+    <a href="/me" target="_blank"><h3>我</h3></a>
+    <a href="javascript:tab();"><h2 class="glyphicon glyphicon-align-justify"></h2></a>
+</header>
+<nav id="menu">
+    <h1 class="menu_">浆果工厂</h1>
+    <h3 class="bf menu_"><em>Berry Factory</em></h3>
+    <ul class="menu_">
+        <li><a href="/users/login" target="_blank">登录</a></li>
+        <li><a href="/users/sign-up" target="_blank">注册</a></li>
+        <li><a href="/watch" target="_blank">发现</a></li>
+        <li><a href="/factory" target="_blank">工厂</a></li>
+        <li><a href="/me" target="_blank">我</a></li>
+        <li><a href="/users/exit" target="_blank">退出登录</a></li>
+    </ul>
+</nav>
+<main>
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+            <div class="thumbnail picture">
+                <img src="<%- data %>" width="500">
+                <div class="caption">
+                    <p><%- width %>x<%- height %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon">标题</span>
+        <input type="text" class="form-control" id="title" placeholder="请输入该照片的标题, 45字以内..." aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group">
+        <span class="input-group-addon">简介</span>
+        <input type="text" class="form-control" id="desc" placeholder="请输入该照片的简介, 140字以内..." aria-describedby="basic-addon1">
+    </div>
+    <button class="btn btn-primary btn-block" onclick="submit()">发布</button>
+</main>
+<footer class="col-sm-12">
+    <h1>浆果工厂</h1>
+    <h3>BerryFactory</h3>
+    <p></p><p></p>
+    <p>v-1.0.0</p>
+    <p>Last publish 2019/03/09 21:00</p>
+    <p>Powered by <a href="https://github.com/qianduanXIAOHAOZI/WanderingImage" target="_blank">WanderingImage</a>, <a href="http://www.bootcss.com/" target="_blank">Bootstrap</a></p>
+</footer>
+<script type="text/javascript" src="/javascripts/tab.js"></script>
+<script type="text/javascript">
+    var imageData = "<%- data %>";
+    var width = <%- width %>;
+    var height = <%- height %>;
+    function submit() {
+        $.ajax({
+            type: "post",
+            url: "/publish/picture/submit",
+            data: {
+                file: imageData,
+                width: width,
+                height: height,
+                title: $("#title").val(),
+                desc: $("#desc").val()
+            },
+            error: function (e) {
+                alert("服务器出错！错误信息: " + JSON.stringify(e));
+            },
+            success: function (res) {
+                if (res.search(/error/i) > -1) {
+                    alert("发布失败！具体信息: " + res.replace(/error/i));
+                } else {
+                    alert("发布成功！");
+                    window.location.href = "/watch/picture?id=" + res;
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

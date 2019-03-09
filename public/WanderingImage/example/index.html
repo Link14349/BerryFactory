@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wandering Image</title>
+    <link type="text/css" rel="stylesheet" href="style/index.css"/>
+    <script type="text/javascript" src="../release/WanderingImage-v1.0.0.min.js"></script>
+    <style type="text/css">
+        canvas{
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<canvas id="image" width="920" height="680"></canvas>
+<ul class="filters">
+    <li onclick="image.filter('grey')" class="filters-item">Grey</li>
+    <li onclick="image.filter('greyComponent')" class="filters-item">Grey by component</li>
+    <li onclick="image.filter('greyMax')" class="filters-item">Grey by max value</li>
+    <li onclick="image.filter('greyAverage')" class="filters-item">Grey by average value</li>
+    <li onclick="image.filter('blackWhite')" class="filters-item">Black and white</li>
+    <li onclick="image.filter('reverse')" class="filters-item">Reverse</li>
+    <li onclick="image.filter('blur')" class="filters-item">Blur</li>
+    <li onclick="image.filter('mosaic', { degree: 5 })" class="filters-item">Mosaic</li>
+    <li onclick="image.filter('poster', { degree: 5 })" class="filters-item">Poster</li>
+</ul>
+<button onclick="clear();">Clear</button>
+<button onclick="download();">Download</button>
+<div>
+    size: <input type="range" id="pen-size" min="1" max="100" step="1"/>
+    <select id="type">
+        <option value="grey">Grey</option>
+        <option value="greyComponent">Grey by component</option>
+        <option value="greyMax">Grey by max value</option>
+        <option value="greyAverage">Grey by average value</option>
+        <option value="blackWhite">Black and white</option>
+        <option value="reverse">Reverse</option>
+        <option value="blur">Blur</option>
+        <option value="mosaic">Mosaic</option>
+        <option value="poster">Poster</option>
+    </select>
+</div>
+<script type="text/javascript">
+    let image = new WImage();
+    let canvas = document.getElementById("image");
+    image.bind(canvas);
+    image.pushImage("image/bg.png", {}, function () {
+        let ctx = image.ctx();
+        ctx.textAlign = "right";
+        ctx.textBaseline = "bottom";
+        image.insertText("Powered by WanderingImage-v1.0.0", 920, 680, "bold 35px Arial", "#fff");
+    });
+    function clear() {
+        let ctx = image.ctx();
+        ctx.clearRect(0, 0, 920, 680);
+        ctx.textAlign = "right";
+        ctx.textBaseline = "bottom";
+        image.pushImage('image/TheWanderingEarth.jpg');
+        image.insertText("Powered by WanderingImage-v1.0.0", 920, 680, "bold 35px Arial", "#fff");
+    }
+    let down = false;
+    canvas.onmousedown = function (e) {
+        down = true;
+        if (type == "reverse") {
+            let size = Number(s_dom.value);
+            image.filter(type, {
+                x: e.pageX, y: e.pageY,
+                sw: size, sh: size,
+            });
+        }
+    };
+    canvas.onmouseup = function () {
+        down = false;
+    };
+    let t_dom = document.getElementById("type");
+    let type = "grey";
+    t_dom.onclick = function (e) {
+        type = t_dom.value;
+    };
+    let s_dom = document.getElementById("pen-size");
+    canvas.onmousemove = function (e) {
+        if (type == "reverse") {
+            return;
+        }
+        if (down) {
+            type = t_dom.value;
+            let size = Number(s_dom.value);
+            image.filter(type, {
+                x: e.pageX, y: e.pageY,
+                sw: size, sh: size,
+                degree: 5
+            });
+        }
+    };
+    function exportCanvasAsPNG(canvasElement, fileName) {
+        let MIME_TYPE = "image/png";
+        let imgURL = canvasElement.toDataURL(MIME_TYPE);
+        let dlLink = document.createElement('a');
+        dlLink.download = fileName;
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+    }
+    function download() {
+        image.download("image/bmp", "image.bmp");
+    }
+</script>
+</body>
+</html>

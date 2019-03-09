@@ -1,0 +1,9 @@
+.filters{
+    list-style: none;
+}
+.filters li{
+    display: block;
+    float: left;
+    margin-right: 10px;
+    cursor: pointer;
+}

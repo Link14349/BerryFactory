@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="cn"/>
+    <title>浆果工厂-图片交流平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico"/>
+
+    <link rel='stylesheet' type="text/css" href='/stylesheets/style.css'/>
+
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/javascripts/md5.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+<header class="col-sm-12">
+    <h1>浆果工厂 <small class="desr">图片交流平台</small></h1>
+    <a href="/watch" target="_blank"><h3>发现</h3></a>
+    <a href="/factory" target="_blank"><h3>工厂</h3></a>
+    <a href="/me" target="_blank"><h3>我</h3></a>
+    <a href="javascript:tab();"><h2 class="glyphicon glyphicon-align-justify"></h2></a>
+</header>
+<nav id="menu">
+    <h1 class="menu_">浆果工厂</h1>
+    <h3 class="bf menu_"><em>Berry Factory</em></h3>
+    <ul class="menu_">
+        <li><a href="/users/login" target="_blank">登录</a></li>
+        <li><a href="/users/sign-up" target="_blank">注册</a></li>
+        <li><a href="/watch" target="_blank">发现</a></li>
+        <li><a href="/factory" target="_blank">工厂</a></li>
+        <li><a href="/me" target="_blank">我</a></li>
+        <li><a href="/users/exit" target="_blank">退出登录</a></li>
+    </ul>
+</nav>
+<main class="user">
+    <% var level_names = ["骨器", "石器", "青铜", "铁器", "工业", "原子"] %>
+    <h1><%- user.name %> <small>的信息</small></h1>
+    <table class="table table-striped table-hover table-bordered info" style="width: 90%;">
+        <thead>
+        <tr><td><b>#</b></td> <th>类型</th> <th>信息</th></tr>
+        </thead>
+        <tbody>
+        <tr><td><b>1</b></td> <td>昵称</td> <td><%- user.name %></td></tr>
+        <tr><td><b>2</b></td> <td>账号</td> <td><small><b>ID</b></small> <%- user.id %></td></tr>
+        <tr><td><b>3</b></td> <td>等级</td> <td>Lv. <%- user.level %></td></tr>
+        <tr><td><b>4</b></td> <td>头衔</td> <td><b><%- level_names[user.level] %></b>时代</td></tr>
+        </tbody>
+    </table>
+    <h2>作品</h2>
+    <div class="row">
+    <% if (pictures.length > 0) { %>
+        <% for (var i in pictures) { %>
+        <a href="/watch/picture?id=<%- pictures[i].id %>">
+            <div class="panel panel-default col-sm-4">
+                <div class="panel-body">
+                    <h1><%- pictures[i].title %></h1>
+                    <p><%- pictures[i].desr %></p>
+                </div>
+            </div>
+        </a>
+        <% } %>
+    <% } else { %>
+        <h3><small>(暂无作品)</small></h3>
+    <% } %>
+    </div>
+</main>
+<footer class="col-sm-12">
+    <h1>浆果工厂</h1>
+    <h3>BerryFactory</h3>
+    <p></p><p></p>
+    <p>v-1.0.0</p>
+    <p>Last publish 2019/03/09 21:00</p>
+    <p>Powered by <a href="https://github.com/qianduanXIAOHAOZI/WanderingImage" target="_blank">WanderingImage</a>, <a href="http://www.bootcss.com/" target="_blank">Bootstrap</a></p>
+</footer>
+<script type="text/javascript" src="/javascripts/tab.js"></script>
+</body>
+</html>

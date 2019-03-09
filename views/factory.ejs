@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta lang="cn"/>
+    <title>浆果工厂-图片交流平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico"/>
+
+    <link rel='stylesheet' type="text/css" href='/stylesheets/style.css'/>
+
+    <script type="text/javascript" src="/javascripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/WanderingImage/release/WanderingImage-v1.0.0.min.js"></script>
+    <script type="text/javascript" src="/javascripts/md5.js"></script>
+    <script type="text/javascript" src="/javascripts/cookie.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body class="factory">
+<header class="col-sm-12">
+    <h1>浆果工厂 <small class="desr">图片交流平台</small></h1>
+    <a href="/watch" target="_blank"><h3>发现</h3></a>
+    <a href="/factory" target="_blank"><h3>工厂</h3></a>
+    <a href="/me" target="_blank"><h3>我</h3></a>
+    <a href="javascript:tab();"><h2 class="glyphicon glyphicon-align-justify"></h2></a>
+</header>
+<nav id="menu">
+    <h1 class="menu_">浆果工厂</h1>
+    <h3 class="bf menu_"><em>Berry Factory</em></h3>
+    <ul class="menu_">
+        <li><a href="/users/login" target="_blank">登录</a></li>
+        <li><a href="/users/sign-up" target="_blank">注册</a></li>
+        <li><a href="/watch" target="_blank">发现</a></li>
+        <li><a href="/factory" target="_blank">工厂</a></li>
+        <li><a href="/me" target="_blank">我</a></li>
+        <li><a href="/users/exit" target="_blank">退出登录</a></li>
+    </ul>
+</nav>
+<main>
+    <div class="upload-file" id="upload-contain">
+        点击上传图片
+        <input type="file" class="input-file" multiple="true" id="picture-loader">
+    </div>
+    <button class="btn btn-default" id="download" onclick="image.download('image/png', 'BerryFactory.png')"><span class="glyphicon glyphicon-download-alt"></span> 下载至本地</button>
+    <button class="btn btn-default" id="publish" onclick="publish()"><span class="glyphicon glyphicon-open"></span> 发布</button>
+    <canvas id="picture"></canvas>
+    <div class="toolbar">
+        <div class="right">
+            <div class="controller" id="text">
+                <img src="/images/text.png" width="40px" height="40px">
+                文字
+            </div>
+            <div class="controller" id="pen">
+                <img src="/images/pen.png" width="40px" height="40px">
+                画笔
+            </div>
+            <div class="controller" id="graffiti">
+                <img src="/images/graffiti.png" width="40px" height="40px">
+                涂鸦
+            </div>
+            <div class="controller" id="filter">
+                <img src="/images/filter.png" width="40px" height="40px">
+                滤镜
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="controller-bar text-bar" id="font-controller">
+                <h1 id="text-shower">T</h1><!--演示-->
+                <span>字体: </span>
+                <select id="font-family">
+                    <option value="Arial">Arial</option>
+                    <option value="Helvetica Neue">Helvetica Neue</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="sans-serif">sans-serif</option>
+                </select>
+                <span>字号: <input type="range" min="1" max="100" step="1" id="font-size"/></span>
+                <span>颜色: <input type="color" id="font-color" value="#ffffff"/></span>
+            </div>
+            <div class="controller-bar pen-bar" id="pen-controller">
+                <div class="circle" id="pen-shower"></div>
+                <span>大小: <input type="range" min="1" max="80" step="1" id="pen-size"/></span>
+                <span>颜色: <input type="color" id="pen-color" value="#2aabd2"/></span>
+            </div>
+            <div class="controller-bar pen-bar" id="graffiti-controller">
+                <img class="box" id="graffiti-shower" src="/uploads/graffiti/blur.png" />
+                <span>大小: <input type="range" min="1" max="100" step="1" value="5" id="graffiti-size"/></span>
+            </div>
+            <div class="controller-bar filter-bar" id="filter-controller">
+                <div class="row">
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('grey', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/grey.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('greyComponent', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/greyComponent.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('greyMax', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/greyMax.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('greyAverage', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/greyAverage.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('blackWhite', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/blackWhite.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('reverse', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/reverse.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('poster', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/poster.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('blur', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/blur.png" >
+                        </a>
+                    </div>
+                    <div class="col-xs-2 filter-list-item">
+                        <a href="javascript:image.filter('mosaic', { degree: 10 })" class="thumbnail graffiti-list-item">
+                            <img src="/uploads/filter/mosaic.png" >
+                        </a>
+                    </div>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="input-text" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">添加文字</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">文字</span>
+                        <input type="text" class="form-control" placeholder="请输入文字..." aria-describedby="basic-addon1" id="image-text">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="add-text">添加</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+    <div class="modal fade" id="input-graffiti" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">选择涂鸦类型</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6 col-md-3">
+                            <a href="javascript:graffitiStyle('blur');" id="graffiti-list-blur" class="thumbnail graffiti-list-item">
+                                <img src="/uploads/graffiti/blur.png">
+                            </a>
+                        </div>
+                        <div class="col-xs-6 col-md-3">
+                            <a href="javascript:graffitiStyle('mosaic');" id="graffiti-list-mosaic" class="thumbnail graffiti-list-item">
+                                <img src="/uploads/graffiti/mosaic.png">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="add-text">添加</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</main>
+<div class="board"></div>
+<script type="text/javascript" src="/javascripts/tab.js"></script>
+<script type="text/javascript" src="/javascripts/factory.js"></script>
+</body>
+</html>
